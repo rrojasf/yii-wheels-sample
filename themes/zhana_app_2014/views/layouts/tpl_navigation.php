@@ -1,0 +1,126 @@
+<?php $this->widget('bootstrap.widgets.TbNavbar', array(
+    'color' => TbHtml::NAVBAR_COLOR_INVERSE,
+    'brandLabel' =>Yii::app()->params['name'],
+    'collapse' => true,
+    'fluid'=>true,
+    'items' => array(
+        array(
+            'class' => 'bootstrap.widgets.TbNav',
+            'items' => array(
+            	array(
+            		//'label' => 'Calendario',
+            		'icon'=>'calendar white margin',
+            		'url' => array('/eventos/create'),
+            	    'visible'=>Yii::app()->user->checkAccess(Rights::module()->superuserName),            	    
+            		),
+            		//'visible'=>Yii::app()->user->checkAccess('propietario') || Yii::app()->user->checkAccess('espectador'),
+            		//                 ),            		
+                array('label' => 'Calendario',
+                	'icon'=>'calendar white margin',
+                	'url' => array('/eventos/admin'),                		
+                	), 
+                    //'visible'=>Yii::app()->user->checkAccess('propietario') || Yii::app()->user->checkAccess('espectador'),              
+//                 ),   
+            	array(
+            	    'label' => 'Clientes', 
+            	    'url' => array('/clientes/admin'), 
+            	    'icon'=>'book white margin',
+            		'visible'=>Yii::app()->user->checkAccess(Rights::module()->superuserName),
+            	), 
+                array(
+                    'label' => 'Bonos',
+                    'url' => array('/bonos/admin'),
+                    'icon'=>'book white margin',
+                    'visible'=>Yii::app()->user->checkAccess(Rights::module()->superuserName),
+                ),                
+//                 array(
+//                     'label' => 'Sincronización',
+//                     //'url' => array('/procesos/synchronize'),
+//                     'url' => array('/procesos/sync'),
+//                     'icon'=>'retweet white margin',
+//                     'visible'=>Yii::app()->user->checkAccess(Rights::module()->superuserName),
+//                 ), 
+                array('label' => 'Sinc', 'icon' => 'retweet white margin',
+                    'items' => array(
+                        array('label' => 'Importar Registros', 'url' => array('/procesos/sync')),
+                        //array('label' => 'Exportar Registros', 'url' => array('/procesos/export')),
+                    ),
+                    'visible'=>Yii::app()->user->checkAccess(Rights::module()->superuserName),
+                ),                
+            	array('label' => 'Configuracion', 'icon' => 'wrench white margin',
+            		'items' => array(
+//             			array('label' => 'Colores', 'url' => array('/tiposevento/admin')),
+//             			TbHtml::menuDivider(),
+            			array('label' => 'Unidades de Negocio', 'url' => array('/unidadesnegocio/admin')),
+            			array('label' => 'Servicios', 'url' => array('/servicios/admin')),
+//             				array('label' => 'ServiciosAdmin', 'url' => array('/servicios/getList')),
+            			array('label' => 'Planes', 'url' => array('/planes/admin')),
+//             			array('label' => 'Asociar Servicios a Planes', 'url' => array('/planesservicios/admin')),            				           				            				
+            			array('label' => 'Especialistas', 'url' => array('/especialistas/admin')),
+//            				array('label' => 'Asociar Especialistas a Servicios', 'url' => array('/serviciosespecialistas/admin')),
+            			array('label' => 'Horarios', 'url' => array('/horarios/createAll')),
+            			array('label' => 'Salones', 'url' => array('/salones/admin')),
+//             			array('label' => 'Asociar Salones a Servicios', 'url' => array('/salonesservicios/admin')),            				
+            			array('label' => 'Convenios', 'url' => array('/convenios/admin')),
+            			array('label' => 'Medios', 'url' => array('/medios/admin')),
+            			TbHtml::menuDivider(),
+            			array('label' => 'Perfiles', 'url' => array('/perfiles/admin')),
+            			array('label' => 'Usuarios', 'url' => array('/usuarios/index')),
+            		),
+            		'visible'=>Yii::app()->user->checkAccess(Rights::module()->superuserName),
+            	), 
+//             		array('label' => 'Exportar', 'icon' => 'print white margin',
+//             				'items' => array(
+//             				//             			array('label' => 'Colores', 'url' => array('/tiposevento/admin')),
+//             				//             			TbHtml::menuDivider(),
+//             						array('label' => 'Indicador de Oportunidad', 'url' => array('/eventos/exportIndicador')),
+//             						array('label' => 'Calendario', 'url' => array('/eventos/exportAgenda')),
+//             				),
+//             				'visible'=>Yii::app()->user->checkAccess(Rights::module()->superuserName),
+//             		),            		           		           		        
+            ),
+        ),       
+        array(
+            'class' => 'bootstrap.widgets.TbNav',
+            'htmlOptions'=>array('class'=>'pull-right'),
+            'items' => array(
+//                 array('label' => 'Ayuda', 'icon' => 'question-sign white margin',
+//                     'items' => array(
+//                         array('label' => 'Quick Tour', 'icon' => 'play-circle margin', 'url' => "#", 'htmlOptions' => array('onclick' => 'guiders.show("1")')),
+// //                         array('label' => 'Manual de Usuario', 'icon' => 'book margin', 'url' => "#", 'htmlOptions' => array('onclick' => 'js:alert("Lanzador de Ayuda");')),
+// //                        	TbHtml::menuDivider(),
+// //                        	array('label' => 'Soporte', 'icon' => 'pencil margin', 'url' => Yii::app()->params['supportUrl']),
+//                     ), 
+//                     'visible'=>true,//!Yii::app()->user->isGuest,              
+//                 ),  
+            	array('label' => 'Accesos', 'url' => array('/rights'), 'icon'=>'lock white margin',
+            		'visible'=>Yii::app()->user->checkAccess(Rights::module()->superuserName),
+            	),            		             
+                array('label' => ''.Yii::app()->user->name, 'icon' => 'user white margin', 
+                		//'url' => array('/usuarios/editprofile')
+                    'items' => array(
+                        array('label' => 'Actualizar Perfil', 'icon'=>'edit', 'url' => array('/usuarios/editprofile'), 'visible'=>Yii::app()->user->checkAccess('usuarios.editprofile'),),
+                    ), 
+                ),
+                array('label'=>'Ingresar', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
+                array('label'=>'', 'icon' => 'off white margin', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),
+                
+            ),
+        ),/*
+        TbHtml::button('<span class="icon-search"></span>',array(
+            'id'=>'buscar-actividad',
+            //'color'=>TbHtml::BUTTON_COLOR_,
+            'size'=>TbHtml::BUTTON_SIZE_DEFAULT,
+            //'class'=>'aqua-search-button pull-right',
+            'class'=>'pull-right',
+            // Verificar manejo, actualmente se remite por get el add_new ya que no funciono la js para actualizar el hidden
+            //'submit'=>array('actividades/create', 'add_new'=>1), 
+        )),*/
+//        TbHtml::navbarSearchForm(array(Yii::app()->params['defaultNavSearch']), 'post',
+//            array(
+//                'class'=>'pull-right',
+//                'inputOptions' => array('class' => 'search-query span2',  
+//                    'placeholder' => Yii::t('app','Buscar Actividades')
+//            ))),
+    ),
+)); ?>

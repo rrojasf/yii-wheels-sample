@@ -1,0 +1,75 @@
+/* Bugify v1.6.1004 (built 2013-10-15 08:51:59) */
+$(document).ready(function(){$(".update-status").bind("click",function(){var h=new Modal("#update-status");
+h.show();return false});$(".update-button").bind("click",function(){var h=new Modal("#update-box");h.show();return false});
+
+
+$(".attach-button").bind("click",function(){
+var h=new Modal("#attach-box");
+h.show();return false});
+
+$(".launch-attach-button").bind("click",function(){
+    $(".hidden-attach-input").click();return false});
+
+$(".hidden-attach-input").bind("change",function(j){
+    var i=j.target.files;
+    if(typeof i!=="undefined"&&i.length>0){
+        var h="";
+        
+        if(i.length>1){
+        h=lang.get("js.issue.attach.multiple");
+        h=sprintf(h,i.length)
+        }else{
+        h=i[0].name}g(h);showCommentHelper()}});
+        
+        if($(".comment-attach-dropbox").length>0&&typeof window.FileReader!=="undefined"){
+            var f=null,c=null;function e(h){h.preventDefault();
+            h.stopPropagation();
+            if(c!==null){clearTimeout(c);c=null}if(f===null){f=setTimeout(function(){
+            var i=$(".comment-attach-dropbox"),j=$(".add-comment-holder");
+            i.css({width:j.outerWidth(),height:j.outerHeight(),top:j.offset().top,left:j.offset().left,zIndex:99});
+            i.show();f=null},50)}return false}function b(h){h.preventDefault();
+            h.stopPropagation();if(f!==null){clearTimeout(f);
+            f=null}c=setTimeout(function(){var i=$(".comment-attach-dropbox");i.hide();c=null},50);
+            return false}window.addEventListener("dragenter",e,false);window.addEventListener("dragover",e,false);
+            window.addEventListener("dragleave",b,false);$(".comment-attach-dropbox").get(0).addEventListener("drop",function(m){m.preventDefault();m.stopPropagation();b(m);if(m.dataTransfer&&m.dataTransfer.files&&m.dataTransfer.files.length>0){var k=m.dataTransfer.files,l=new FormData(),n=new XMLHttpRequest(),h=0;for(var j=0;j<k.length;j++){l.append("attachment[]",k[j]);
+            h+=k[j].size}l.append("jsattach","true");if(typeof maxUploadSize==="undefined"){maxUploadSize=h}if(h<=maxUploadSize){
+            if(k.length>1){message=lang.get("js.issue.attach.multiple");
+            message=sprintf(message,k.length)}else{message=k[0].name}n.upload.onprogress=function(q){var i=q.position||q.loaded,p=q.totalSize||q.total,o=0;o=(Math.floor(i/p*1000)/10);a(message,o,n);if(o<100){$(".comment-write-submit").attr("disabled","disabled");
+            $(".hidden-attach-input").attr("disabled","disabled")}else{$(".comment-write-submit").removeAttr("disabled");
+            $(".hidden-attach-input").removeAttr("disabled")}};n.onreadystatechange=function(r){if(this.readyState==4){var s=r.target,o=jQuery.parseJSON(s.responseText);if(o!==null&&o.status){if(o.ids&&o.ids.length>0){var q=o.ids,p;for(p=0;p<q.length;p++){
+            $(".issue-attach-hidden").append('<input type="hidden" name="attachmentIds[]" value="'+q[p]+'" />')}}}}};
+            $(".comment-write-submit").attr("disabled","disabled");$(".hidden-attach-input").attr("disabled","disabled");n.open("POST","",true);n.send(l)}else{console.log("too large")}}showCommentHelper();return false},false)}function d(){
+            $(".issue-attach-hidden").html('<input name="attachment[]" class="hidden-attach-input" type="file" multiple="multiple" />')}
+            function g(i){var h='<a href="#cancel-attachment" class="issue-attach-details-cancel" title="'+lang.get("js.issue.attach.cancel")+'" rel="tipsyup"></a>'+i;$(".issue-attach-details").html(h).show();
+            $(".issue-attach-details-cancel").bind("click",function(j){j.preventDefault();$(this).trigger("mouseout");d();
+            $(".issue-attach-details").html("").hide();showCommentHelper();return false})}function a(j,i,k){
+            if($(".issue-attach-progress").length===0){var h='<a href="#cancel-attachment" class="issue-attach-progress-cancel" title="'+lang.get("js.issue.attach.progress.cancel")+'" rel="tipsyup"></a><div class="issue-attach-progress"></div>';
+            $(".issue-attach-details").html(h).show();$(".issue-attach-progress-cancel").bind("click",function(l){l.preventDefault();k.abort();$(this).trigger("mouseout");d();
+            $(".issue-attach-details").html("").hide();$(".comment-write-submit").removeAttr("disabled");
+            $(".hidden-attach-input").removeAttr("disabled");showCommentHelper();return false})}var h='<div style="width: '+i+'%"></div><span>'+j+"</span>";
+            $(".issue-attach-progress").html(h).show();if(i>=100){$(".issue-attach-progress-cancel").hide()}}$(".delete-issue-button").bind("click",function(){var h=new Modal("#delete-box");h.show();return false});$(".manage-labels-button").bind("click",function(){var h=new Modal("#labels-box");h.show();return false});loadRelatedIssues();if(typeof prettyPrint!=="undefined"){prettyPrint()}startAutoSaveDraft();$("#forgetDraft").bind("click",function(){$("#draftBox").fadeOut();$('input[name="enableAutoSave"]').val("true");startAutoSaveDraft();$.ajax({url:baseUrl+"/issues/js-forget-draft",dataType:"json",type:"POST",data:"",success:function(h){},error:function(h){}});return false});initSuggestions();if(useMarkdownEditor){initPagedown()}startAutoUiUpdate()});$(".comment-write-box").autoResize();var closetimer=null;
+            
+            function closeCommentHelper(){if($(".comment-write-box").val().length==0&&$(".issue-attach-details").html().length==0&&!$(".comment-write-box").is(":focus")){$(".comment-write-box-helper").slideUp();$(".comment-write-pagedown-toolbar").slideUp()}}function showCommentHelper(){if($(".comment-write-box").length>0){var a="js.issue.comment.button.submit";
+            if($(".comment-write-box").val().length>0&&$(".issue-attach-details").html().length>0){
+            a="js.issue.comment.button.submit.withattachment"}else{if($(".comment-write-box").val().length==0&&$(".issue-attach-details").html().length>0){
+            a="js.issue.comment.button.submit.attachment"}}$(".comment-write-submit").val(lang.get(a));if($(".comment-write-box-helper").is(":hidden")){$(".comment-write-box-helper").slideDown()}if($(".comment-write-pagedown-toolbar").is(":hidden")){$(".comment-write-pagedown-toolbar").slideDown()}}}function cancelCommentHelperTimer(){if(closetimer){window.clearTimeout(closetimer);closetimer=null}}$(".comment-write-box").keyup(function(){showCommentHelper()});$(".comment-write-box").focusin(function(){cancelCommentHelperTimer();showCommentHelper()});$(".comment-write-box").focusout(function(){window.setTimeout(closeCommentHelper,600)});
+            $("#attach-file").submit(
+            function(){$(".upload-holder").hide();$(".throbber-holder").show();$(".button").attr("disabled","disabled")});
+            function updateCategoriesFromModalBox(){var a=$("#update-box").find("#project").val(),c=$("#update-box").find("#category").val(),b="";
+            if(c.length>0){b=$("#update-box").find('.categories option[value="'+c+'"]').text()}updateCategories(a,b)}
+            function updateCategoriesFromNew(){var a=$("#project").val();updateCategories(a)}
+            function updateCategories(a,b){$(".category-throbber").fadeIn();$.ajax({url:baseUrl+"/issues/js-get-categories",dataType:"json",type:"GET",data:({project_id:a}),success:function(e){if(e.status){if(e.categories.length>0){var c='<option value="">None</option>';for(var d=0;d<e.categories.length;d++){if(e.categories[d].name!=b){c+='<option value="'+e.categories[d].id+'">'+e.categories[d].name+"</option>"}else{c+='<option value="'+e.categories[d].id+'" selected="selected">'+e.categories[d].name+"</option>"}}$(".categories").html(c);$(".categories-holder").show()}else{$(".categories").html();$(".categories-holder").hide()}}else{$(".categories").html();$(".categories-holder").hide()}},error:function(c){$(".categories").html();$(".categories-holder").hide()},complete:function(){$(".category-throbber").fadeOut()}})}
+            function followIssue(a){$.ajax({url:baseUrl+"/issues/js-follow-issue",dataType:"json",type:"POST",data:({issue_id:a}),success:function(b){if(b.status){$(".follow").find("a").removeClass("follow-icon").addClass("unfollow-icon").attr("onclick","unFollowIssue('"+a+"'); return false;").attr("title","Un-Follow Issue")}else{showMessage("error",lang.get("js.issue.follow.error"))}},error:function(b){showMessage("error",lang.get("js.issue.follow.error"))},complete:function(){}})}function unFollowIssue(a){$.ajax({url:baseUrl+"/issues/js-unfollow-issue",dataType:"json",type:"POST",data:({issue_id:a}),success:function(b){if(b.status){$(".follow").find("a").removeClass("unfollow-icon").addClass("follow-icon").attr("onclick","followIssue('"+a+"'); return false;").attr("title","Follow Issue")}else{showMessage("error",lang.get("js.issue.unfollow.error"))}},error:function(b){showMessage("error",lang.get("js.issue.unfollow.error"))},complete:function(){}})}function editComment(b){var c=$("#comment-"+b);
+            var a=new Modal("#edit-comment-box");a.show();
+            $("#edit-comment-box .edit-comment-content").val(c.val());
+            $("#edit-comment-box #edit-comment-id").val(b);
+            
+            $("#edit-comment-box .edit-comment-content").focus()}
+            function deleteComment(b){var a=new Modal("#delete-comment-box");a.show();
+            $("#delete-comment-box #delete-comment-id").val(b)}
+            function deleteAttachment(b){var a=new Modal("#delete-attachment-box");a.show();$("#delete-attachment-box #delete-attachment-filename").val(b)}
+            
+            
+            
+            
+            function replyToComment(){$(".comment-write-box").focus()}function showHistory(a){if($(".issue-history-holder").is(":hidden")){$(".issue-history-holder").fadeIn();$(".show-history-button").html(lang.get("js.issue.history.loading"));$.ajax({url:baseUrl+"/issues/js-get-history",dataType:"json",type:"POST",data:({issue_id:a}),success:function(b){if(b.status){if(b.history.length>0){$(".issue-history").html(b.history)}else{$(".issue-history").html(lang.get("js.issue.history.noitems"))}}else{showMessage("error",lang.get("js.issue.history.error"))}},error:function(b){showMessage("error",lang.get("js.issue.history.error"))},complete:function(){$(".issue-history-throbber").fadeOut("fast",function(){$(".issue-history").fadeIn()});$(".show-history-button").html(lang.get("js.issue.history.button.hide"))}})}else{$(".issue-history-holder").fadeOut();$(".show-history-button").html(lang.get("js.issue.history.button.show"))}}var fetchedRelatedIssuesCount=0;function loadRelatedIssues(){if($(".issue-overview-related-issues-box").length>0){var a=$("#issueId").val();$.ajax({url:baseUrl+"/issues/js-get-related-issues",dataType:"json",type:"GET",data:({issueId:a}),success:function(b){if(b.status){if(b.related&&b.related.length>0){$(".issue-overview-related-issues").html(b.related);$(".issue-overview-related-issues-box").fadeIn()}else{$(".issue-overview-related-issues-box").fadeOut()}}fetchedRelatedIssuesCount++;if(fetchedRelatedIssuesCount<2){setTimeout(loadRelatedIssues,1000)}},error:function(b){}})}}function removeRelationship(b,a){$.ajax({url:baseUrl+"/issues/js-remove-related-issue",dataType:"json",type:"POST",data:({issueId:b,relatedIssueId:a}),success:function(c){$(".related-issue-row-"+a).fadeOut();showMessage("ok",'Removed relationship with <a href="/issues/'+a+'">#'+a+"</a>.")},error:function(c){showMessage("error",lang.get("js.issue.related.remove.error"))},complete:function(){setTimeout(loadRelatedIssues,500)}})}function startAutoSaveDraft(){if($('input[name="enableAutoSave"]').val()=="true"){scheduleAutoSaveDraft()}}function scheduleAutoSaveDraft(a){var a=a||5000;setTimeout(function(){autoSaveDraft()},a)}function autoSaveDraft(){var a=$("#newIssue").serialize();if($(".auto-save-message").html()==""){$(".auto-save-message").html(lang.get("js.issue.draft.saving"))}$.ajax({url:baseUrl+"/issues/js-save-draft",dataType:"json",type:"POST",data:a,success:function(b){if(b.status&&b.saved){$(".auto-save-message").html(sprintf(lang.get("js.issue.draft.saved"),b.date));scheduleAutoSaveDraft()}else{if(!b.saved){$(".auto-save-message").html(lang.get("js.issue.draft.error"));scheduleAutoSaveDraft()}}},error:function(b){$(".auto-save-message").html(lang.get("js.issue.draft.error"))}})}function startAutoUiUpdate(){scheduleAutoUiUpdate(2000)}function scheduleAutoUiUpdate(a){var a=a||5000;setTimeout(function(){autoUiUpdate()},a)}function autoUiUpdate(){var a=$("#issueId").val();if(typeof a!=="undefined"&&a.length>0){$.ajax({url:baseUrl+"/issues/js-get-issue",dataType:"json",type:"GET",data:({issueId:a}),success:function(b){if(b.status){if(b.comments&&b.comments.length>0){$("#commentsListContainer").html(b.comments)}if(typeof prettyPrint!=="undefined"){prettyPrint()}scheduleAutoUiUpdate()}},error:function(b){}})}}function initSuggestions(){var e=$("#issueId").val();if(typeof e!=="undefined"&&e.length>0){var d=new Suggestions();d.watch(".comment-write-box");var c=new Suggestions();c.watch(".edit-comment-content");var b=new Suggestions();b.watch(".issues-status-comment");var a=new Suggestions();a.watch(".issues-update-description")}else{var d=new Suggestions();d.watch(".issues-new-description")}}function initPagedown(){var a=$("#issueId").val();if(typeof a!=="undefined"&&a.length>0){initPagedownEditor("-comment");initPagedownEditor("-editcomment");initPagedownEditor("-status");initPagedownEditor("-update")}else{initPagedownEditor("-new")}}var pagedownOptions={};function initPagedownEditor(c){var c=c||"";var b=Markdown.getSanitizingConverter();var a=new Markdown.Editor(b,c,pagedownOptions);a.run()}function filterLabelsList(){var b=$("#labels-box").find(".filter-labels-box").val().toLowerCase(),d=$("#labels-box").find("#issue-labels-list > ul").children(),a=$("#labels-box").find(".no-items-message"),c=0;d.each(function(e,f){if($(this).find("span.label").text().toLowerCase().indexOf(b)<0){$(this).hide()}else{$(this).show();c++}});if(c==0){a.show()}else{a.hide()}}function showLabelColours(){var e=$("#labels-box").find(".new-label-colours");if(e.is(":hidden")){var d=$("#issueId").val(),b=$("#labels-box").find(".new-label-box"),a=$("#labels-box").find(".new-label-colour"),c=$("#labels-box").find(".new-label-button");$("#labels-box").find(".label-colours-palette > li > span").bind("click",function(f){a.val($(this).data("hex"));a.css("borderColor",$(this).data("hex"))});a.bind("keyup",function(f){a.css("borderColor",$(this).val())});c.one("click",function(i){if(b.val().length>0&&a.val().length>0){var f=$("#issue-labels-list"),g=$("#labels-box").find(".no-items-message"),j=f.find("input[type=checkbox]:checked"),h=[];if(j.length>0){j.each(function(){h.push($(this).val())})}$.ajax({url:baseUrl+"/issues/js-add-label",dataType:"json",type:"POST",data:{issueId:d,label:b.val(),colour:a.val(),selected:h},success:function(k){if(k.status){e.slideUp();b.val("");if(k.labels_html&&k.labels_html.length>0){f.replaceWith(k.labels_html);g.hide()}else{g.show()}}},error:function(k){}})}})}e.slideDown()};
