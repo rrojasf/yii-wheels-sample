@@ -106,4 +106,22 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+	public function actionUpdateInLine($model_name)
+	{
+		$model=$model_name::model()->findByPk($_POST['pk']);
+
+        
+		if ($model===null) {
+			throw new CHttpException(404,'The requested page does not exist.');
+		}        
+        
+		if (isset($_POST['scenario']) && (strcmp($_POST['scenario'], "update") === 0)) {
+			$model->$_POST['name']=$_POST['value'];
+			if ($model->save()) {
+				return true;
+            } else {
+                return false;
+            }
+		}
+	}     
 }

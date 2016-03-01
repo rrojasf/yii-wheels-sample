@@ -17,14 +17,14 @@
  * @property Actividades[] $actividades1
  */
 //class Usuarios extends CActiveRecord
-class Usuarios extends ManyManyActiveRecord
+class Users extends ManyManyActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return '{{usuarios}}';
+		return '{{users}}';
 	}
 
 	/**
@@ -35,9 +35,9 @@ class Usuarios extends ManyManyActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('usr_alias, usr_email, usr_nombre, usr_prf_id', 'required'),
-            array('usr_email', 'email'),
-            array('usr_alias', 'unique'),
+			array('usr_alias, usr_email, usr_name', 'required'),
+	            	array('usr_email', 'email'),
+	            	array('usr_alias', 'unique'),
 			array('usr_alias, usr_password, usr_salt, usr_email', 'length', 'max'=>128),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -53,13 +53,6 @@ class Usuarios extends ManyManyActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'eventos' => array(self::HAS_MANY, 'Eventos', 'usr_id'),			
-            'usrPrf' => array(self::BELONGS_TO, 'Perfiles', 'usr_prf_id'),
-			'eventosCliente' => array(self::HAS_MANY, 'Eventos', 'usr_id_cliente'),
-			'eventosAutor' => array(self::HAS_MANY, 'Eventos', 'usr_id_crea'),
-			'eventosModifica' => array(self::HAS_MANY, 'Eventos', 'usr_id_mod'),
-			'usrPrf' => array(self::BELONGS_TO, 'Perfiles', 'usr_prf_id'),
-			'cli' => array(self::BELONGS_TO, 'Clientes', 'cli_id'),				
 		);
 	}
 
@@ -74,9 +67,8 @@ class Usuarios extends ManyManyActiveRecord
 			'usr_password' => 'Password',
 			'usr_salt' => 'SecurityKey',
 			'usr_email' => 'Email',
-			'usr_nombre' => 'Nombre',
-            'usr_prf_id' => 'Perfil',
-            'usr_estado' => 'Estado'
+			'usr_name' => 'Nombre',
+			'usr_status' => 'Estado'
 		);
 	}
 
@@ -100,13 +92,13 @@ class Usuarios extends ManyManyActiveRecord
 
 		$criteria->compare('usr_id',$this->usr_id);
 		$criteria->compare('usr_alias',$this->usr_alias,true);        
-		$criteria->compare('usr_nombre',$this->usr_nombre,true);
+		$criteria->compare('usr_name',$this->usr_name,true);
 		$criteria->compare('usr_password',$this->usr_password,true);
 		$criteria->compare('usr_salt',$this->usr_salt,true);
 		$criteria->compare('usr_email',$this->usr_email,true);
-		$criteria->compare('usr_prf_id',$this->usr_prf_id);
-		$criteria->compare('usr_estado',$this->usr_estado);
-		$criteria->compare('cli_id',$this->cli_id);		
+		
+		$criteria->compare('usr_status',$this->usr_status);
+	
 
 		return new CActiveDataProvider($this, array(
             'pagination'=>array(
@@ -170,7 +162,7 @@ class Usuarios extends ManyManyActiveRecord
 			if($this->isNewRecord)
 			{
 				$this->usr_salt=$this->generateSalt();
-                $this->usr_estado = 1;
+                $this->usr_status = 1;
 			}
             
 			//if(!empty($_POST["usr_password"])) {
@@ -191,21 +183,5 @@ public function scopes()
       ),
     );
   }
-  
-    public function getRoles(){
-        $assignedRoles = Rights::getAssignedRoles(Yii::app()->user->getId());                 
-        $listRoles = array();
-
-        foreach($assignedRoles as $rol) {
-            array_push($listRoles, '\''.$rol->name.'\'');
-        } 
-
-        return implode(',',$listRoles);      
-    }
-    
-    public function getPerfil(){
-        $usuario = Usuarios::model()->findByPk(Yii::app()->user->getId());                 
-
-        return array('id'=>$usuario->usr_prf_id, 'nombre'=>$usuario->usrPrf->prf_nombre);
-    }    
+      
 }

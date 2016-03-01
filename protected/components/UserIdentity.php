@@ -22,9 +22,9 @@ class UserIdentity extends CUserIdentity
 	{
 		$users=Users::model()->find('LOWER(usr_alias)=?',array(strtolower($this->username)));
 
-		if($usuarios===null)
+		if($users===null)
 			$this->errorCode=self::ERROR_USERNAME_INVALID;
-		else if(!$usuarios->validatePassword($this->password))
+		else if(!$users->validatePassword($this->password))
 			$this->errorCode=self::ERROR_PASSWORD_INVALID;
 		else
 		{
